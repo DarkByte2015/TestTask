@@ -19,7 +19,8 @@ def emplist(request):
     for b, e in lranges:
         r = r'^[%s-%s].{0,}' % (b.lower(), e.lower())
         l = [h for h in employees if re.match(r, h.secondname.lower())]
-        rng = (b, e, l)
+        gid = ord(b)
+        rng = (b, e, l, gid)
         ranges.append(rng)
 
     return render(request, 'EmployeesList/emplist.html', { 'ranges' : ranges })
