@@ -1,0 +1,57 @@
+.tabs {
+  position: relative;
+  min-height: 180px;
+  display: block;
+  margin: 1em auto 0;
+  width: 513px;
+}
+
+.tab {
+  float: left;
+}
+
+.tab label {
+  cursor: pointer;
+  background: #c69;
+  font-size: 1.2em;
+  border-radius: 5px 5px 0 0;
+  padding: .5em 1em;
+}
+
+.tab [type=radio] {
+  position: absolute;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+
+  &:focus + label {
+    outline: 2px dotted #000;
+  }
+}
+
+.content {
+  background: wheat;
+  border: 1px solid #c69;
+  border-radius: 0 5px 5px;
+  padding: .5em 2em;
+  max-width: 505px;
+  position: absolute;
+  top: 2em; left: 0; right: 0; bottom: 0;
+  opacity: 0;
+}
+
+[type=radio]:checked ~ label {
+  z-index: 2;
+  background: #c99;
+}
+
+[type=radio]:checked ~ label ~ .content {
+  z-index: 1;
+  opacity: 1;
+}
+
+body {
+  font-family: monospace;
+  font-size: 1.1em;
+}

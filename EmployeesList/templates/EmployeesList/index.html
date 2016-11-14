@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EmployeesList</title>
+    <link rel="stylesheet" href="{% static 'EmployeesList/styles.css' %}">
+  </head>
+  <body>
+    <div class="tabs">
+      {% for b, e, l in ranges %}
+      <div class="tab">
+        <input type="radio" name="tabs" id="tab-{{b}}{{e}}" {% ifequal b 'А' %} checked {% endifequal %}>
+        <label for="tab-{{b}}{{e}}">{{b}} - {{e}}</label>
+        <div class="content">
+          {% for emp in l %}
+          <div class="row">
+            <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
