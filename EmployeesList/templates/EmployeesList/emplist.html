@@ -1,4 +1,5 @@
 {% extends 'EmployeesList/base.html' %}
+{% block title %}Список работников{% endblock %}
 {% block content %}
 <div class="tabs">
   {% for begchr, endchr, emplist, gid in ranges %}
@@ -15,4 +16,4 @@
   </div>
   {% endfor %}
 </div>
-{% endblock content %}
+{% endblock %}

@@ -1,12 +1,14 @@
-<!--<p>secondname: {{employee.secondname}}</p>
-<p>firstname: {{employee.firstname}}</p>
-<p>middlename: {{employee.middlename}}</p>
-<p>birthdate: {{employee.birthdate}}</p>
-<p>email: {{employee.email}}</p>
-<p>phone: {{employee.phone}}</p>
-<p>begin_work: {{employee.begin_work}}</p>
-<p>end_work: {{employee.end_work}}</p>
-<p>position: {{employee.position}}</p>
-<p>department: {{employee.department}}</p>-->
-
-{{employee}}
+{% extends 'EmployeesList/base.html' %}
+{% block title %}Работник {{employee.secondname}}{% endblock %}
+{% block content %}
+<div>Фамилия:</div><div>{{employee.secondname}}</div>
+<div>Имя:</div><div>{{employee.firstname}}</div>
+<div>Отчество:</div><div>{{employee.middlename}}</div>
+<div>Дата рождения:</div><div>{{employee.birthdate}}</div>
+<div>Электронная почта:</div><div>{{employee.email}}</div>
+<div>Телефон:</div><div>{{employee.phone}}</div>
+<div>Начало работы:</div><div>{{employee.begin_work}}</div>
+<div>Окончание работы:</div><div>{{employee.end_work}}</div>
+<div>Должность:</div><div>{{employee.position}}</div>
+<div>Отдел:</div><div>{{employee.department}}</div>
+{% endblock content %}

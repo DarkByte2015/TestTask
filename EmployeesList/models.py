@@ -17,7 +17,8 @@ class Employee(models.Model):
     department = models.CharField(max_length=50)
 
     def __str__(self):
-        return '<br>'.join('%s : %s' % item for item in vars(self).items())
+        return self.secondname
+        #return '<br>'.join('%s : %s' % item for item in vars(self).items())
 
     class Meta:
         db_table = 'employee'

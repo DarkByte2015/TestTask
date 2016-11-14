@@ -27,4 +27,4 @@ def emplist(request):
 
 def employee(request, id):
     emp = get_object_or_404(Employee, pk=id)
-    return HttpResponse(emp)
+    return render(request, 'EmployeesList/employee.html', { 'employee' : emp })

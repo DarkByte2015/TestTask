@@ -1,2 +1,6 @@
+{% extends 'EmployeesList/base.html' %}
+{% block title %}Тестовое задание{% endblock %}
+{% block content %}
 <a href="{% url 'EmployeesList:emplist' %}">Список работников</a>
 <a href="/admin">Админка</a>
+{% endblock content %}
