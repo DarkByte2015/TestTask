@@ -9,6 +9,9 @@ from .models import Employee
 # Create your views here.
 
 def index(request):
+    return render(request, 'EmployeesList/index.html')
+
+def emplist(request):
     lranges = [ ('А', 'Г'), ('Д', 'Ж'), ('З', 'К'), ('Л', 'П'), ('Р', 'У'), ('Ф', 'Я') ]
     employees = Employee.objects.all()
     ranges = []
@@ -19,7 +22,7 @@ def index(request):
         rng = (b, e, l)
         ranges.append(rng)
 
-    return render(request, 'EmployeesList/index.html', { 'ranges' : ranges })
+    return render(request, 'EmployeesList/emplist.html', { 'ranges' : ranges })
 
 def employee(request, id):
     emp = get_object_or_404(Employee, pk=id)

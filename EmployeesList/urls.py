@@ -5,6 +5,7 @@ from . import views
 app_name = 'EmployeesList'
 
 urlpatterns = [
-    url(r'^$', views.index, name = 'index'),
+    url(r'^$', views.index, name='index'),
+    url(r'^emplist/$', views.emplist, name = 'emplist'),
     url(r'^(?P<id>[0-9]+)/$', views.employee, name = 'employee')
 ]
