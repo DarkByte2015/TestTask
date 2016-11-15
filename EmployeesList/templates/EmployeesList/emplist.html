@@ -13,7 +13,9 @@
   <div role="tabpanel" class="tab-pane {% ifequal begchr 'А' %} active {% endifequal %}" id="tab-{{gid}}">
     {% for emp in emplist %}
     <div class="row">
-      <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
+      <div class="col-md-5">
+        <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
+      </div>
     </div>
     {% endfor %}
   </div>
