@@ -1,18 +1,21 @@
 {% extends 'EmployeesList/base.html' %}
 {% block title %}Список работников{% endblock %}
 {% block content %}
-<div class="tabs">
+<ul class="nav nav-tabs" role="tablist">
   {% for begchr, endchr, emplist, gid in ranges %}
-  <div class="tab">
-    <input type="radio" name="tabs" id="tab-{{gid}}" {% ifequal begchr 'А' %} checked {% endifequal %}>
-    <label for="tab-{{gid}}">{{begchr}} - {{endchr}}</label>
-    <div class="content">
-      {% for emp in emplist %}
-      <div class="row">
-        <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
-      </div>
-      {% endfor %}
+  <li class="{% ifequal begchr 'А' %} active {% endifequal %}">
+    <a href="#tab-{{gid}}" aria-controls="tab-{{gid}}" role="tab" data-toggle="tab">{{begchr}} - {{endchr}}</a>
+  </li>
+  {% endfor %}
+</ul>
+<div class="tab-content">
+  {% for begchr, endchr, emplist, gid in ranges %}
+  <div role="tabpanel" class="tab-pane {% ifequal begchr 'А' %} active {% endifequal %}" id="tab-{{gid}}">
+    {% for emp in emplist %}
+    <div class="row">
+      <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
     </div>
+    {% endfor %}
   </div>
   {% endfor %}
 </div>

@@ -1,14 +1,31 @@
 {% extends 'EmployeesList/base.html' %}
 {% block title %}Работник {{employee.secondname}}{% endblock %}
 {% block content %}
-<div>Фамилия:</div><div>{{employee.secondname}}</div>
-<div>Имя:</div><div>{{employee.firstname}}</div>
-<div>Отчество:</div><div>{{employee.middlename}}</div>
-<div>Дата рождения:</div><div>{{employee.birthdate}}</div>
-<div>Электронная почта:</div><div>{{employee.email}}</div>
-<div>Телефон:</div><div>{{employee.phone}}</div>
-<div>Начало работы:</div><div>{{employee.begin_work}}</div>
-<div>Окончание работы:</div><div>{{employee.end_work}}</div>
-<div>Должность:</div><div>{{employee.position}}</div>
-<div>Отдел:</div><div>{{employee.department}}</div>
-{% endblock content %}
+<header class="page-header text-center">Работник {{employee.secondname}}</header>
+<div class="row">
+  <div class="col-md-offset-4 col-md-2">
+    <div>Фамилия:</div>
+    <div>Имя:</div>
+    <div>Отчество:</div>
+    <div>Дата рождения:</div>
+    <div>Электронная почта:</div>
+    <div>Телефон:</div>
+    <div>Начало работы:</div>
+    <div>Окончание работы:</div>
+    <div>Должность:</div>
+    <div>Отдел:</div>
+  </div>
+  <div class="col-md-2">
+    <div>{{employee.secondname}}</div>
+    <div>{{employee.firstname}}</div>
+    <div>{{employee.middlename}}</div>
+    <div>{{employee.birthdate}}</div>
+    <div>{{employee.email}}</div>
+    <div>{{employee.phone}}</div>
+    <div>{{employee.begin_work}}</div>
+    <div>{{employee.end_work}}</div>
+    <div>{{employee.position}}</div>
+    <div>{{employee.department}}</div>
+  </div>
+</div>
+{% endblock %}
