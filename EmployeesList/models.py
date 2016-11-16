@@ -13,7 +13,7 @@ class Employee(models.Model):
     email = models.EmailField('Электронная почта', max_length=50)
     phone = models.CharField('Телефон', max_length=15)
     begin_work = models.DateTimeField('Начало работы')
-    end_work = models.DateTimeField('Окончание работы')
+    end_work = models.DateTimeField('Окончание работы', blank=True, null=True, default=None)
     position = models.CharField('Должность', max_length=50)
     department = models.CharField('Отдел', max_length=50)
 
@@ -27,7 +27,7 @@ class Employee(models.Model):
 
     @is_working.getter
     def is_working(self):
-        return str(len(str(self.end_work)) == 0).lower()
+        return str(self.end_work == None).lower()
 
     def __str__(self):
         return self.secondname
