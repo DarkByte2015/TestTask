@@ -76,15 +76,15 @@ WSGI_APPLICATION = 'TestTask.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'emplist',
-        # 'USER': '',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432'
-        # 'TIME_ZONE': 'UTC+3' # 'Russia/Moscow'
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'emplist',
+        'USER': 'ilya',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        #'TIME_ZONE': 'Europe/Moscow'
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'Europe/Moscow' #'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

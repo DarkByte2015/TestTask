@@ -5,8 +5,8 @@ from django.db import models
 # Create your models here.
 
 class Employee(models.Model):
-    firstname = models.CharField(max_length=50)
     secondname = models.CharField(max_length=50)
+    firstname = models.CharField(max_length=50)
     middlename = models.CharField(max_length=50)
     birthdate = models.DateField()
     email = models.EmailField(max_length=50)
@@ -18,7 +18,6 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.secondname
-        #return '<br>'.join('%s : %s' % item for item in vars(self).items())
 
     class Meta:
         db_table = 'employee'

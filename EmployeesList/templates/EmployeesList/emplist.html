@@ -1,24 +1,36 @@
 {% extends 'EmployeesList/base.html' %}
 {% block title %}Список работников{% endblock %}
 {% block content %}
-<ul class="nav nav-tabs" role="tablist">
-  {% for begchr, endchr, emplist, gid in ranges %}
-  <li class="{% ifequal begchr 'А' %} active {% endifequal %}">
-    <a href="#tab-{{gid}}" aria-controls="tab-{{gid}}" role="tab" data-toggle="tab">{{begchr}} - {{endchr}}</a>
-  </li>
-  {% endfor %}
-</ul>
-<div class="tab-content">
-  {% for begchr, endchr, emplist, gid in ranges %}
-  <div role="tabpanel" class="tab-pane {% ifequal begchr 'А' %} active {% endifequal %}" id="tab-{{gid}}">
-    {% for emp in emplist %}
-    <div class="row">
-      <div class="col-md-5">
-        <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
+<div class="row">
+  <div class="col-md-8">
+    <ul class="nav nav-tabs" role="tablist">
+      {% for begchr, endchr, emplist, gid in ranges %}
+      <li class="{% ifequal begchr 'А' %} active {% endifequal %}">
+        <a href="#tab-{{gid}}" aria-controls="tab-{{gid}}" role="tab" data-toggle="tab">{{begchr}} - {{endchr}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="tab-content">
+      {% for begchr, endchr, emplist, gid in ranges %}
+      <div role="tabpanel" class="tab-pane {% ifequal begchr 'А' %} active {% endifequal %}" id="tab-{{gid}}">
+        {% for emp in emplist %}
+        <div class="row">
+          <div class="col-md-5">
+            <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
+          </div>
+        </div>
+        {% endfor %}
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
-  {% endfor %}
+  <div class="col-md-offset-1 col-md-2">
+    <div class="checkbox">
+      <label><input type="checkbox" value="">Test</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" value="">Test</label>
+    </div>
+  </div>
 </div>
 {% endblock %}
