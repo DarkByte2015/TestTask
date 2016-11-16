@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
-
 from django.db import models
+#from binascii import crc32
+import binascii
 
 # Create your models here.
 
@@ -15,6 +16,18 @@ class Employee(models.Model):
     end_work = models.DateTimeField('Окончание работы')
     position = models.CharField('Должность', max_length=50)
     department = models.CharField('Отдел', max_length=50)
+
+    depid = property()
+
+    @depid.getter
+    def depid(self):
+        return str(binascii.crc32(self.department.encode()))
+
+    is_working = property()
+
+    @is_working.getter
+    def is_working(self):
+        return str(len(str(self.end_work)) == 0).lower()
 
     def __str__(self):
         return self.secondname

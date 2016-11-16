@@ -14,7 +14,7 @@
       {% for begchr, endchr, emplist, gid in ranges %}
       <div role="tabpanel" class="tab-pane {% ifequal begchr 'А' %} active {% endifequal %}" id="tab-{{gid}}">
         {% for emp in emplist %}
-        <div class="row">
+        <div class="row" is_working="{{emp.is_working}}" depid="{{emp.depid}}">
           <div class="col-md-5">
             <a href="{% url 'EmployeesList:employee' id=emp.id %}">{{emp.secondname}}</a>
           </div>
@@ -26,15 +26,14 @@
   </div>
   <div class="col-md-offset-1 col-md-2">
     <div class="checkbox">
-      <label><input type="checkbox" value="" id="work">Только работающие</label>
+      <label><input type="checkbox" id="is_working">Только работающие</label>
     </div>
     <div>Отделы:</div>
+    {% for dep, depid in departments %}
     <div class="checkbox">
-      <label><input type="checkbox" value="">Test</label>
+      <label><input class="dep" type="checkbox" checked id="{{depid}}">{{dep}}</label>
     </div>
-    <div class="checkbox">
-      <label><input type="checkbox" value="">Test</label>
-    </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

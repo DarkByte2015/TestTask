@@ -24,7 +24,10 @@ def emplist(request):
         rng = (b, e, l, gid)
         ranges.append(rng)
 
-    return render(request, 'EmployeesList/emplist.html', { 'ranges' : ranges })
+    return render(request, 'EmployeesList/emplist.html', {
+            'ranges' : ranges,
+            'departments' : set((e.department, e.depid) for e in employees)
+        })
 
 def employee(request, id):
     emp = get_object_or_404(Employee, pk=id)
