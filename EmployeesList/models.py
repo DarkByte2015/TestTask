@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-#from binascii import crc32
-import binascii
+from binascii import crc32
 
 # Create your models here.
 
@@ -14,18 +13,14 @@ class Employee(models.Model):
     phone = models.CharField('Телефон', max_length=15)
     begin_work = models.DateTimeField('Начало работы')
     end_work = models.DateTimeField('Окончание работы', blank=True, null=True, default=None)
-    position = models.CharField('Должность', max_length=50)
-    department = models.CharField('Отдел', max_length=50)
+    position = models.ForeignKey('PositionsList')
+    department = models.ForeignKey('DepartmentsList')
 
-    depid = property()
-
-    @depid.getter
+    @property
     def depid(self):
-        return str(binascii.crc32(self.department.encode()))
+        return str(crc32(self.department.name.encode()))
 
-    is_working = property()
-
-    @is_working.getter
+    @property
     def is_working(self):
         return str(self.end_work == None).lower()
 
@@ -36,3 +31,25 @@ class Employee(models.Model):
         db_table = 'employee'
         verbose_name = 'сотрудник'
         verbose_name_plural = 'сотрудники'
+
+class PositionsList(models.Model):
+    name = models.CharField('Название', max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'positions_list'
+        verbose_name = 'Список должностей'
+        verbose_name_plural = 'Списки должностей'
+
+class DepartmentsList(models.Model):
+    name = models.CharField('Название', max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'departments_list'
+        verbose_name = 'Список отделов'
+        verbose_name_plural = 'Списки отделов'
