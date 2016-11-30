@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Список сотрудников{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'employees/css/employees_list.css' %}">
+{% endblock %}
+{% block content %}
+<form action="{% url 'employees:list' %}" method="get">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row flex-wrapper">
+        {% for group in groups %}
+        <div class="radio flex-block">
+          <div class="flex-content">
+            <label>
+              <input
+                class="letter-group"
+                type="radio"
+                name="selected_group"
+                value="{{group.id}}"
+                {% if group.id == selected_group %}checked{% endif %}>
+              {{group.range}}
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for employee in employees %}
+        <div class="row">
+          <div class="col-md-5">
+            <a href="{% url 'employees:employee' pk=employee.id %}">{{employee.lastname}}</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-offset-1 col-md-2">
+      <div class="checkbox">
+        <label>
+          <input
+            type="checkbox"
+            name="is_work"
+            {% if is_work %}checked{% endif %}>
+          Только работающие
+        </label>
+      </div>
+      <div>Отделы:</div>
+      {% for department in departments %}
+      <div class="checkbox">
+        <label>
+          <input
+            class="department"
+            type="checkbox"
+            name="selected_departments"
+            value="{{department.pk}}"
+            {% if department.pk in selected_departments %}checked{% endif %}>
+          {{department.name}}
+        </label>
+      </div>
+      {% endfor %}
+      <!--<input type="button" id="filter" value="Отфильтровать">-->
+      <input type="submit" value="Отфильтровать">
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{% static 'employees/js/employees_list.js' %}"></script>
+{% endblock %}

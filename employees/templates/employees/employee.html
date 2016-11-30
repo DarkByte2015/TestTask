@@ -1,7 +1,7 @@
-{% extends 'EmployeesList/base.html' %}
-{% block title %}Работник {{employee.secondname}}{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Работник {{employee.lastname}}{% endblock %}
 {% block content %}
-<header class="page-header text-center">Работник {{employee.secondname}}</header>
+<header class="page-header text-center">Работник {{employee.lastname}}</header>
 <div class="row">
   <div class="col-md-offset-4 col-md-2">
     <div>Фамилия:</div>
@@ -16,14 +16,14 @@
     <div>Отдел:</div>
   </div>
   <div class="col-md-2">
-    <div>{{employee.secondname}}</div>
+    <div>{{employee.lastname}}</div>
     <div>{{employee.firstname}}</div>
-    <div>{{employee.middlename}}</div>
+    <div>{{employee.secondname}}</div>
     <div>{{employee.birthdate}}</div>
     <div>{{employee.email}}</div>
     <div>{{employee.phone}}</div>
     <div>{{employee.begin_work}}</div>
-    <div>{{employee.end_work}}</div>
+    <div>{{ employee.end_work|default_if_none:"―" }}</div>
     <div>{{employee.position}}</div>
     <div>{{employee.department}}</div>
   </div>

@@ -1,4 +1,4 @@
-"""TestTask URL Configuration
+"""test_task URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
+from django.conf.urls import url, include
 from django.contrib import admin
 
+from . import views
+
 urlpatterns = [
-    url(r'', include('EmployeesList.urls')),
-    url(r'^emplist/', include('EmployeesList.urls')),
+    url(r'^$', views.index, name = 'index'),
     url(r'^admin/', admin.site.urls),
+    url(r'^employees/', include('employees.urls'))
 ]

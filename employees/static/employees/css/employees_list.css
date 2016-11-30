@@ -1,0 +1,14 @@
+.flex-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-block {
+  flex: 0 1 250px;
+  padding:  0 10px;
+}
+
+.flex-content {
+  width: 100px;
+  height: 50px;
+}

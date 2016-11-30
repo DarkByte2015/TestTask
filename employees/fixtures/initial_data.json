@@ -1,0 +1,92 @@
+[
+  {
+    "model" : "employees.Position",
+    "pk" : 1,
+    "fields" : {
+      "name" : "Программист"
+    }
+  },
+  {
+    "model" : "employees.Position",
+    "pk" : 2,
+    "fields" : {
+      "name" : "Менеджер по продажам"
+    }
+  },
+  {
+    "model" : "employees.Position",
+    "pk" : 3,
+    "fields" : {
+      "name" : "Генеральный директор"
+    }
+  },
+  {
+    "model" : "employees.Department",
+    "pk" : 1,
+    "fields" : {
+      "name" : "Веб-разработка"
+    }
+  },
+  {
+    "model" : "employees.Department",
+    "pk" : 2,
+    "fields" : {
+      "name" : "Мобильная разработка"
+    }
+  },
+  {
+    "model" : "employees.Department",
+    "pk" : 3,
+    "fields" : {
+      "name" : "Десктопная разработка"
+    }
+  },
+  {
+    "model" : "employees.Employee",
+    "pk" : 1,
+    "fields" : {
+      "lastname" : "Колесников",
+      "firstname" : "Сергей",
+      "secondname" : "Анатольевич",
+      "birthdate" : "1986-08-18",
+      "email" : "kols@yandex.ru",
+      "phone" : "+79601234567",
+      "begin_work" : "2016-11-25T09:00:00+03:00",
+      "end_work" : "2016-11-25 18:00",
+      "position_id" : "2",
+      "department_id" : "1"
+    }
+  },
+  {
+    "model" : "employees.Employee",
+    "pk" : 2,
+    "fields" : {
+      "lastname" : "Павлов",
+      "firstname" : "Дмитрий",
+      "secondname" : "Яковлевич",
+      "birthdate" : "1993-11-05",
+      "email" : "pav4@gmail.com",
+      "phone" : "+79087654321",
+      "begin_work" : "2016-11-25 09:15",
+      "end_work" : null,
+      "position_id" : "1",
+      "department_id" : "2"
+    }
+  },
+  {
+    "model" : "employees.Employee",
+    "pk" : 3,
+    "fields" : {
+      "lastname" : "Макаров",
+      "firstname" : "Борис",
+      "secondname" : "Леонидович",
+      "birthdate" : "1984-03-21",
+      "email" : "makar@mail.ru",
+      "phone" : "+79601020309",
+      "begin_work" : "2016-11-25 09:00",
+      "end_work" : "2016-11-25 18:30",
+      "position_id" : "3",
+      "department_id" : "3"
+    }
+  }
+]
