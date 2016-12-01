@@ -2,6 +2,20 @@ import itertools
 import collections
 from django.db.models import Q
 
+# сравнивает две одномерные последовательности
+def compare(seq1, seq2):
+    l1 = len(seq1)
+    l2 = len(seq2)
+
+    if l1 != l2:
+        return False
+
+    for item1, item2 in zip(seq1, seq2):
+        if item1 != item2:
+            return False
+
+    return True
+
 # разворачивает многомерную последовательность в одномерную
 def flatten(sequence):
     for item in sequence:
