@@ -1,6 +1,8 @@
 import itertools
 import collections
 from django.db.models import Q
+from django.db import connection
+from .models import Employee, LetterGroup
 
 # сравнивает две одномерные последовательности
 def compare(seq1, seq2):
@@ -24,9 +26,64 @@ def flatten(sequence):
         else:
             yield item
 
-def letter_range(begin, end):
+# формирует последовательность символов в дипазоне
+def char_range(begin, end):
     for letter in range(ord(begin), ord(end) + 1):
         yield chr(letter)
+
+# рассчитывает информацию о сотрудниках
+def compute_letter_info(begin, end):
+    all_count = 0
+    nonempty_count = 0
+    letters = []
+
+    for c in char_range(begin, end):
+        char_count = Employee.objects.filter(lastname__startswith = c).count()
+        all_count += char_count
+        letter = { 'letter': c, 'count': char_count }
+        letters.append(letter)
+
+        if char_count:
+            nonempty_count += 1
+
+    if nonempty_count:
+        avg_count = all_count / nonempty_count
+    else:
+        avg_count = 0
+
+    return {
+        'letters': letters,
+        'letters_count': len(letters),
+        'all_count': all_count,
+        'nonempty_count': nonempty_count,
+        'avg_count': round(avg_count)
+    }
+
+def get_group_letters(info, index):
+    employees_count = 0
+    j = index
+
+    while employees_count < info['avg_count'] and j < info['letters_count']:
+        letter = info['letters'][j]
+        employees_count += letter['count']
+        j += 1
+        yield letter
+
+    yield from itertools.takewhile(lambda l: l['count'] == 0, info['letters'][j:])
+
+# формирует группы букв
+def compute_groups(begin, end):
+    info = compute_letter_info(begin, end)
+    i = 0
+
+    while i < info['letters_count']:
+        group_letters = list(get_group_letters(info, i))
+        i += len(group_letters)
+        group_begin = group_letters[0]['letter']
+        group_end = group_letters[-1]['letter']
+        group = LetterGroup.objects.create(begin = group_begin, end = group_end)
+        group.save()
+        yield group
 
 # распределяет работников по буквам
 def distribute_by_letters(employees):
@@ -36,7 +93,7 @@ def distribute_by_letters(employees):
     # получаем работников начинающихся с каждой буквы
     # и считаем количество не пустых букв
 
-    for c in letter_range('А', 'Я'):
+    for c in char_range('А', 'Я'):
         c_employees = [e for e in employees if e[0].upper() == c]
         letter = (c, c_employees)
         letters.append(letter)
@@ -90,7 +147,7 @@ def get_employees(context):
     q1 = Q()
     selected_group = context['groups'][context['selected_group']]
 
-    for letter in selected_group['letters']:
+    for letter in selected_group['range']:
         q1 |= Q(lastname__startswith = letter)
 
     if context['is_work']:
@@ -101,4 +158,20 @@ def get_employees(context):
     for department_id in context['selected_departments']:
         q2 |= Q(department_id = department_id)
 
-    return q1 & q2
+    return Employee.objects.filter(q1 & q2)
+
+def get_groups():
+    if LetterGroup.objects.count() == 0:
+        groups = compute_groups()
+        print(connection.queries)
+    else:
+        groups = LetterGroup.objects.all()
+
+    for group in groups:
+        yield {
+            'id': group.id,
+            'range': char_range(group.begin, group.end),
+            'begin': group.begin,
+            'end': group.end,
+            'str': str(group)
+        }

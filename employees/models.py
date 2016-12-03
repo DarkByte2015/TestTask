@@ -38,9 +38,21 @@ class Employee(models.Model):
     department = models.ForeignKey(Department)
 
     def __str__(self):
-        return self.secondname
+        return self.lastname
 
     class Meta:
         db_table = 'employee'
-        verbose_name = 'сотрудник'
-        verbose_name_plural = 'сотрудники'
+        verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
+        ordering = [ 'lastname' ]
+
+class LetterGroup(models.Model):
+    begin = models.CharField('Начальная буква диапазона', max_length = 1)
+    end = models.CharField('Конечная буква диапазона', max_length = 1)
+
+    def __str__(self):
+        return "%s-%s" % (self.begin, self.end)
+
+    class Meta:
+        db_table = 'letter_group'
+        ordering = [ 'begin' ]

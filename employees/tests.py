@@ -16,9 +16,9 @@ class UtilsTestCase(TestCase):
         isEqual = utils.compare(mylst, flst)
         self.assertTrue(isEqual)
 
-    def test_letter_range(self):
+    def test_char_range(self):
         myrng = [ 'A', 'B', 'C', 'D' ]
-        rng = list(utils.letter_range('A', 'D'))
+        rng = list(utils.char_range('A', 'D'))
         isEqual = utils.compare(myrng, rng)
         self.assertTrue(isEqual)
 

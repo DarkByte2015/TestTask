@@ -10,49 +10,28 @@ class EmployeesListView(generic.ListView):
     template_name = 'employees/employees_list.html'
     model = Employee
 
-    def __init__(self):
-        employees = [ e.lastname for e in Employee.objects.all() ]
-        letters, avg = utils.distribute_by_letters(employees)
-        groups = utils.distribute_by_groups(letters, avg)
-        groups = [ g[0] for g in groups]
-        self._groups = []
-
-        for index, key in enumerate(groups):
-            begin, end = tuple(key.split('-'))
-
-            group = {
-                'id': index,
-                'letters': utils.letter_range(begin, end),
-                'begin': begin,
-                'end': end,
-                'range': key
-            }
-
-            self._groups.append(group)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['groups'] = self._groups
+        context['groups'] = list(utils.get_groups())
         context['departments'] = Department.objects.all()
-        context['selected_group'] = [ 0 ]
+        context['selected_group'] = 0
         context['is_work'] = False
         context['selected_departments'] = [ d.pk for d in context['departments']]
         data = self.request.GET
 
         if data:
-            context['selected_group'] = data.get('selected_group', context['selected_group'])
-            context['selected_group'] = [ int(g) for g in context['selected_group'] ]
+            tmp = data.get('selected_group', context['selected_group'])
+            tmp = [ int(g) for g in context['selected_group'] ]
+            context['selected_group'] = tmp[0]
 
-            context['is_work'] = data.get('is_work', context['is_work'])
-            context['is_work'] = not context['is_work'] != 'on'
+            tmp = data.get('is_work', context['is_work'])
+            context['is_work'] = not tmp != 'on'
 
-            context['selected_departments'] = data.getlist('selected_departments', context['selected_departments'])
-            context['selected_departments'] = [ int(d) for d in context['selected_departments'] ]
+            tmp = data.getlist('selected_departments', context['selected_departments'])
+            context['selected_departments'] = [ int(d) for d in tmp ]
 
-        print(context['is_work'])
-        context['selected_group'] = context['selected_group'][0]
-        q = utils.get_employees(context)
-        context['employees'] = Employee.objects.filter(q)
+        context['employees'] = utils.get_employees(context)
+        print(context['employees'].query)
         return context
 
 class EmployeeView(generic.DetailView):

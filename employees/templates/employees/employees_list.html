@@ -6,7 +6,6 @@
 {% endblock %}
 {% block content %}
 <form action="{% url 'employees:list' %}" method="get">
-  {% csrf_token %}
   <div class="row">
     <div class="col-md-8">
       <div class="row flex-wrapper">
@@ -20,7 +19,7 @@
                 name="selected_group"
                 value="{{group.id}}"
                 {% if group.id == selected_group %}checked{% endif %}>
-              {{group.range}}
+              {{group.str}}
             </label>
           </div>
         </div>
