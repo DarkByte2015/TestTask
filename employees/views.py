@@ -14,15 +14,14 @@ class EmployeesListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['groups'] = list(utils.get_groups())
         context['departments'] = Department.objects.all()
-        context['selected_group'] = 0
+        context['selected_group'] = context['groups'][0]['id']
         context['is_work'] = False
         context['selected_departments'] = [ d.pk for d in context['departments']]
         data = self.request.GET
 
         if data:
             tmp = data.get('selected_group', context['selected_group'])
-            tmp = [ int(g) for g in context['selected_group'] ]
-            context['selected_group'] = tmp[0]
+            context['selected_group'] = int(tmp)
 
             tmp = data.get('is_work', context['is_work'])
             context['is_work'] = not tmp != 'on'
@@ -31,7 +30,6 @@ class EmployeesListView(generic.ListView):
             context['selected_departments'] = [ int(d) for d in tmp ]
 
         context['employees'] = utils.get_employees(context)
-        print(context['employees'].query)
         return context
 
 class EmployeeView(generic.DetailView):

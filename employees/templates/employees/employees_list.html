@@ -7,35 +7,29 @@
 {% block content %}
 <form action="{% url 'employees:list' %}" method="get">
   <div class="row">
-    <div class="col-md-8">
-      <div class="row flex-wrapper">
-        {% for group in groups %}
-        <div class="radio flex-block">
-          <div class="flex-content">
-            <label>
-              <input
-                class="letter-group"
-                type="radio"
-                name="selected_group"
-                value="{{group.id}}"
-                {% if group.id == selected_group %}checked{% endif %}>
-              {{group.str}}
-            </label>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
+    <div class="col-md-6 col-md-offset-2 employees">
+      {% for employee in employees %}
       <div class="row">
-        {% for employee in employees %}
-        <div class="row">
-          <div class="col-md-5">
-            <a href="{% url 'employees:employee' pk=employee.id %}">{{employee.lastname}}</a>
-          </div>
+        <div class="col-md-5">
+          <a href="{% url 'employees:employee' pk=employee.id %}">{{employee.lastname}}</a>
         </div>
-        {% endfor %}
       </div>
+      {% endfor %}
     </div>
     <div class="col-md-offset-1 col-md-2">
+      {% for group in groups %}
+      <div>
+        <label>
+          <input
+            class="letter-group"
+            type="radio"
+            name="selected_group"
+            value="{{group.id}}"
+            {% if group.id == selected_group %}checked{% endif %}>
+          {{group.str}}
+        </label>
+      </div>
+      {% endfor %}
       <div class="checkbox">
         <label>
           <input

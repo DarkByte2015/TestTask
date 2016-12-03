@@ -1,7 +1,6 @@
 import itertools
 import collections
 from django.db.models import Q
-from django.db import connection
 from .models import Employee, LetterGroup
 
 # сравнивает две одномерные последовательности
@@ -25,6 +24,13 @@ def flatten(sequence):
             yield from flatten(item)
         else:
             yield item
+
+def get_item(sequence, predicate, default = None):
+    for item in sequence:
+        if predicate(item):
+            return item
+
+    return default
 
 # формирует последовательность символов в дипазоне
 def char_range(begin, end):
@@ -145,7 +151,7 @@ def distribute_by_groups(letters, avg):
 # формирует запрос
 def get_employees(context):
     q1 = Q()
-    selected_group = context['groups'][context['selected_group']]
+    selected_group = get_item(context['groups'], lambda g: g['id'] == context['selected_group'])
 
     for letter in selected_group['range']:
         q1 |= Q(lastname__startswith = letter)
@@ -161,11 +167,10 @@ def get_employees(context):
     return Employee.objects.filter(q1 & q2)
 
 def get_groups():
-    if LetterGroup.objects.count() == 0:
-        groups = compute_groups()
-        print(connection.queries)
-    else:
-        groups = LetterGroup.objects.all()
+    groups = LetterGroup.objects.all()
+
+    if len(groups) == 0:
+        groups = compute_groups('А', 'Я')
 
     for group in groups:
         yield {
