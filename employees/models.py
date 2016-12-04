@@ -31,7 +31,7 @@ class Employee(models.Model):
     secondname = models.CharField('Отчество', max_length=50)
     birthdate = models.DateField('Дата рождения')
     email = models.EmailField('Электронная почта', max_length=50)
-    phone = models.CharField('Телефон', max_length=15)
+    phone = models.CharField('Телефон', max_length=30)
     begin_work = models.DateTimeField('Начало работы')
     end_work = models.DateTimeField('Окончание работы', blank=True, null=True, default=None)
     position = models.ForeignKey(Position)

@@ -1,3 +1,4 @@
 .employees {
-  overflow-y: scroll;
+  height: 500px;
+  overflow-y: auto;
 }
