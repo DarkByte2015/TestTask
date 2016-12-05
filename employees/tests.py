@@ -16,13 +16,14 @@ class UtilsTestCase(TestCase):
         isEqual = utils.compare(mylst, flst)
         self.assertTrue(isEqual)
 
+    def test_get_item(self):
+        a = [ { 'id': 1, 'name': 'test1' }, { 'id': 2, 'name': 'test2' }, { 'id': 3, 'name': 'test3' } ]
+        r = utils.get_item(a, lambda item: item['id'] == 2)
+        self.assertIsNotNone(r)
+        self.assertEqual(r['name'], 'test2')
+
     def test_char_range(self):
         myrng = [ 'A', 'B', 'C', 'D' ]
         rng = list(utils.char_range('A', 'D'))
         isEqual = utils.compare(myrng, rng)
         self.assertTrue(isEqual)
-
-    def test_distribute_by_letters(self):
-        employees = [ 'Колесников', 'Павлов', 'Макаров' ]
-        letters, avg = utils.distribute_by_letters(employees)
-        self.assertEqual(avg, 1)
