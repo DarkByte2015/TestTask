@@ -96,9 +96,9 @@ def compute_groups(begin, end):
     while i < info['letters_count']:
         group_letters = list(get_group_letters(info, i))
         i += len(group_letters)
-        group_begin = group_letters[0]['letter']
-        group_end = group_letters[-1]['letter']
-        group = LetterGroup.objects.create(begin = group_begin, end = group_end)
+        group = LetterGroup.objects.create()
+        group.begin = group_letters[0]['letter']
+        group.end = group_letters[-1]['letter']
         group.save()
         yield group
 
