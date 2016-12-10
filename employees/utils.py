@@ -80,7 +80,7 @@ def compute_letter_info(begin, end):
     required_count = round(all_count / MAX_GROUP_COUNT)
 
     if avg_count > required_count:
-        total_count = (avg_count - required_count) / MAX_GROUP_COUNT + required_count
+        total_count = avg_count
     else:
         total_count = required_count
 
