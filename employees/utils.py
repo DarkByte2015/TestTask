@@ -1,7 +1,7 @@
 import itertools
 import collections
 from django.db.models import Q, Count
-from .models import Employee, LetterGroup
+from .models import Employee
 
 MAX_GROUP_COUNT = 7
 
@@ -62,7 +62,7 @@ def compute_letter_info(begin, end):
 
     # т.к. из БД были получены не все буквы алфавита,
     # то добавляем недостающие с нулевым количеством
-    
+
     tmp = [ l['letter'] for l in letters ]
 
     for l in char_range(begin, end):
@@ -114,22 +114,29 @@ def get_group_letters(info, index):
 # формирует группы букв
 def compute_groups(begin, end):
     info = compute_letter_info(begin, end)
-    LetterGroup.objects.all().delete()
     i = 0
 
     while i < info['letters_count']:
         group_letters = list(get_group_letters(info, i))
         i += len(group_letters)
-        group = LetterGroup.objects.create()
-        group.begin = group_letters[0]['letter']
-        group.end = group_letters[-1]['letter']
-        group.save()
+        group = {}
+        group['begin'] = group_letters[0]['letter']
+        group['end'] = group_letters[-1]['letter']
+        group['id'] = ord(group['begin'])
+        group['range'] = list(char_range(group['begin'], group['end']))
+        group['str'] = '%s-%s' % (group['begin'], group['end'])
         yield group
 
 # формирует запрос
 def get_employees(context):
     q1 = Q()
-    selected_group = get_item(context['groups'], lambda g: g['id'] == context['selected_group'])
+    selected_group = get_item(
+        context['groups'],
+        lambda g: g['id'] == context['selected_group'],
+        context['groups'][0])
+
+    if selected_group['id'] != context['selected_group']:
+        context['selected_group'] = selected_group['id']
 
     for letter in selected_group['range']:
         q1 |= Q(lastname__startswith = letter)
@@ -140,20 +147,3 @@ def get_employees(context):
     q2 = Q(department_id__in = context['selected_departments'])
 
     return Employee.objects.filter(q1 & q2)
-
-def get_groups():
-    # groups = LetterGroup.objects.all()
-    #
-    # if len(groups) == 0:
-    #     groups = compute_groups('А', 'Я')
-
-    groups = compute_groups('А', 'Я')
-
-    for group in groups:
-        yield {
-            'id': group.id,
-            'range': char_range(group.begin, group.end),
-            'begin': group.begin,
-            'end': group.end,
-            'str': str(group)
-        }

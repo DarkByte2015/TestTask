@@ -12,7 +12,7 @@ class EmployeesListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['groups'] = list(utils.get_groups())
+        context['groups'] = list(utils.compute_groups('А', 'Я'))
         context['departments'] = Department.objects.all()
         context['selected_group'] = context['groups'][0]['id']
         context['is_work'] = False
