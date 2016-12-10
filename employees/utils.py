@@ -1,7 +1,9 @@
 import itertools
 import collections
-from django.db.models import Q
+from django.db.models import Q, Count
 from .models import Employee, LetterGroup
+
+MAX_GROUP_COUNT = 7
 
 # сравнивает две одномерные последовательности
 def compare(seq1, seq2):
@@ -40,35 +42,56 @@ def char_range(begin, end):
 
 # рассчитывает информацию о сотрудниках
 def compute_letter_info(begin, end):
+    # получаем количество сотрудников на каждую букву
+
+    letters = list(Employee.
+        objects.
+        extra({'letter': 'SUBSTR(UPPER(lastname), 1, 1)'}).
+        values('letter').
+        annotate(count = Count('pk')).
+        order_by('letter'))
+
+    # считаем общее количество сотрудников (так быстрее чем делать запрос к БД)
+
     all_count = 0
-    nonempty_count = 0
-    letters = []
 
-    # получаем количество работников, начинающихся
-    # с каждой буквы и считаем количество не пустых букв
+    for l in letters:
+        all_count += l['count']
 
-    for c in char_range(begin, end):
-        char_count = Employee.objects.filter(lastname__startswith = c).count()
-        all_count += char_count
-        letter = { 'letter': c, 'count': char_count }
-        letters.append(letter)
+    nonempty_count = len(letters)
 
-        if char_count:
-            nonempty_count += 1
+    # т.к. из БД были получены не все буквы алфавита,
+    # то добавляем недостающие с нулевым количеством
+    
+    tmp = [ l['letter'] for l in letters ]
 
-    # вычисляем среднее количество работников на группу
+    for l in char_range(begin, end):
+        if not l in tmp:
+            letter = { 'letter': l, 'count': 0 }
+            letters.append(letter)
+
+    # считаем все...
 
     if nonempty_count:
-        avg_count = all_count / nonempty_count
+        avg_count = round(all_count / nonempty_count)
     else:
         avg_count = 0
+
+    required_count = round(all_count / MAX_GROUP_COUNT)
+
+    if avg_count > required_count:
+        total_count = (avg_count - required_count) / MAX_GROUP_COUNT + required_count
+    else:
+        total_count = required_count
 
     return {
         'letters': letters,
         'letters_count': len(letters),
         'all_count': all_count,
         'nonempty_count': nonempty_count,
-        'avg_count': round(avg_count)
+        'avg_count': avg_count,
+        'required_count': required_count,
+        'total_count': total_count
     }
 
 # забирает буквы из списка для группы с индекса
@@ -76,9 +99,9 @@ def get_group_letters(info, index):
     employees_count = 0
     j = index
 
-    # забираем буквы пока их количество меньше среднего значения
+    # забираем буквы пока их количество меньше заданного значения
 
-    while employees_count < info['avg_count'] and j < info['letters_count']:
+    while employees_count < info['total_count'] and j < info['letters_count']:
         letter = info['letters'][j]
         employees_count += letter['count']
         j += 1
@@ -91,6 +114,7 @@ def get_group_letters(info, index):
 # формирует группы букв
 def compute_groups(begin, end):
     info = compute_letter_info(begin, end)
+    LetterGroup.objects.all().delete()
     i = 0
 
     while i < info['letters_count']:
@@ -113,18 +137,17 @@ def get_employees(context):
     if context['is_work']:
         q1 &= Q(end_work = None)
 
-    q2 = Q()
-
-    for department_id in context['selected_departments']:
-        q2 |= Q(department_id = department_id)
+    q2 = Q(department_id__in = context['selected_departments'])
 
     return Employee.objects.filter(q1 & q2)
 
 def get_groups():
-    groups = LetterGroup.objects.all()
+    # groups = LetterGroup.objects.all()
+    #
+    # if len(groups) == 0:
+    #     groups = compute_groups('А', 'Я')
 
-    if len(groups) == 0:
-        groups = compute_groups('А', 'Я')
+    groups = compute_groups('А', 'Я')
 
     for group in groups:
         yield {
